@@ -1,0 +1,12 @@
+{
+  "slug": "iron-temple",
+  "background": "#111110",
+  "delogo": "delogo=x=1848:y=1030:w=64:h=36",
+  "clips": {
+    "lift": {
+      "src": "hero-lift.mp4", "start": 3.0, "end": 7.0,
+      "segs": [[0, 1, 16], [1, 2, 48], [2, 4, 16]],
+      "desk": [1600, 12]
+    }
+  }
+}

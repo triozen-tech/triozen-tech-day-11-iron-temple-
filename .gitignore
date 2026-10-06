@@ -7,6 +7,7 @@ docs/SITES-LOG.md
 
 # recordings and final reel videos (never pushed)
 recordings/
+review/
 *.mov
 /*.mp4
 /reels/

@@ -1,1 +1,443 @@
-/* Brand-specific styles for THIS site (buttons, eyebrow, special effects). Written in Round 1. */
+/* Iron Temple · brutalist mono, foundry edition (site/DESIGN.md).
+   Iron + chalk, one flat accent (20 kg plate blue), thick rules, knurled seams, steel-bezel cards, radius 0. */
+
+:root {
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+  --chalk: #e4e1da;
+  --chalk-ink: #151413;
+  --iron: #111110;
+  --iron-2: #1b1a18;
+  --rule: #34322e;
+  --plate-red: #c8322a;
+  --plate-blue: #2f55e4;
+  --plate-yellow: #e2b42b;
+  --plate-green: #2f7d4a;
+  --plate-white: #e8e6e0;
+  --steel-a: #8d8a84;
+  --steel-b: #3b3935;
+}
+
+html,
+body {
+  overflow-x: clip;
+}
+
+@layer components {
+  /* display type: black + expanded, tight */
+  .stamp {
+    font-family: var(--font-display-family);
+    font-weight: 900;
+    font-stretch: 125%;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    word-spacing: 0.1em;
+    line-height: 0.9;
+  }
+  .stamp-n {
+    font-family: var(--font-display-family);
+    font-weight: 800;
+    font-stretch: 100%;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    line-height: 0.95;
+  }
+  .mono {
+    font-family: var(--mono);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .mono-s {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* thick structural rules */
+  .rule-b {
+    border-bottom: 2px solid var(--rule);
+  }
+  .rule-t {
+    border-top: 2px solid var(--rule);
+  }
+  .rule-r {
+    border-right: 2px solid var(--rule);
+  }
+  .rule-l {
+    border-left: 2px solid var(--rule);
+  }
+
+  /* S7 seam: a thick rule + a strip of diamond knurling, like a barbell's grip */
+  .knurl {
+    height: 14px;
+    background-color: #2a2926;
+    background-image:
+      repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.16) 0 1px, transparent 1px 6px),
+      repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.55) 0 1px, transparent 1px 6px),
+      linear-gradient(180deg, #5a5853, #2a2926 45%, #1c1b19);
+    border-top: 2px solid #0a0a09;
+    border-bottom: 2px solid #0a0a09;
+  }
+  .knurl-light {
+    background-color: #b9b5ad;
+    background-image:
+      repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.5) 0 1px, transparent 1px 6px),
+      repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.35) 0 1px, transparent 1px 6px),
+      linear-gradient(180deg, #d6d2ca, #a9a59d 50%, #8f8b84);
+    border-color: #6f6c66;
+  }
+
+  /* C12 knurled steel bezel: brushed-steel frame, knurl strip on top, a glint that passes (motion in Round 3/4) */
+  .bezel {
+    position: relative;
+    overflow: hidden;
+    padding: 10px;
+    padding-top: 22px;
+    background:
+      repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px 3px),
+      linear-gradient(135deg, #6f6c66, #2e2c29 30%, #55524d 55%, #262523 80%, #4a4843);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12), 0 0 0 1px #0a0a09;
+  }
+  .bezel::before {
+    content: "";
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    top: 6px;
+    height: 8px;
+    background-image:
+      repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.22) 0 1px, transparent 1px 5px),
+      repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.6) 0 1px, transparent 1px 5px);
+    background-color: #3a3835;
+  }
+  .bezel-inner {
+    position: relative;
+    background: var(--iron);
+    overflow: hidden;
+  }
+  .glint {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.16) 50%, transparent 60%);
+    transform: translateX(-60%);
+    mix-blend-mode: screen;
+  }
+
+  /* buttons: square, mono caps */
+  .ibtn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    height: 56px;
+    padding: 0 26px;
+    font-family: var(--mono);
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    overflow: hidden;
+    isolation: isolate;
+    white-space: nowrap;
+  }
+  .ibtn-blue {
+    background: var(--plate-blue);
+    color: var(--text);
+  }
+  .ibtn-chalk {
+    background: var(--chalk);
+    color: var(--chalk-ink);
+  }
+  .ibtn-line {
+    box-shadow: inset 0 0 0 2px currentColor;
+  }
+  /* "the button gets chalked": fill wipes left → right */
+  .ibtn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--chalk);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .ibtn-blue:hover {
+    color: var(--chalk-ink);
+  }
+  .ibtn-blue:hover::before {
+    transform: scaleX(1);
+  }
+  .ibtn-chalk::before {
+    background: var(--iron);
+  }
+  .ibtn-chalk:hover {
+    color: var(--chalk);
+  }
+  .ibtn-chalk:hover::before {
+    transform: scaleX(1);
+  }
+  .ibtn .arrow {
+    width: 22px;
+    height: 2px;
+    background: currentColor;
+    position: relative;
+  }
+  .ibtn .arrow::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: -4px;
+    width: 10px;
+    height: 10px;
+    border-top: 2px solid currentColor;
+    border-right: 2px solid currentColor;
+    transform: rotate(45deg);
+    transform-origin: 100% 0;
+  }
+
+  /* chalk band (Plans) */
+  .band-chalk {
+    background: var(--chalk);
+    color: var(--chalk-ink);
+    --rule: #b9b5ad;
+  }
+  .band-blue {
+    background: var(--plate-blue);
+    color: var(--text);
+  }
+
+  /* split-flap cell (Timetable) */
+  .flap {
+    position: relative;
+    background: #1d1c1a;
+    box-shadow: inset 0 0 0 1px #2c2a27;
+  }
+}
+
+/* the hero film shows the end still in ?static=1 (and under the canvas while frames load) */
+html.is-static .lift-canvas {
+  display: none;
+}
+
+/* pinned stages (LiftPin, the bar) */
+.pin-outer {
+  position: relative;
+}
+.pin-stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+}
+html.is-static .pin-outer {
+  height: auto !important;
+}
+html.is-static .pin-outer .rec-stop {
+  display: none;
+}
+
+/* hero: HEAVY gains weight and width with the bar (M142). --heavy 0 → 1 */
+.heavy-word {
+  font-family: var(--font-display-family);
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  line-height: 0.92;
+  font-variation-settings:
+    "wght" calc(200 + 700 * var(--heavy, 1)),
+    "wdth" calc(62 + 63 * var(--heavy, 1));
+  color: var(--text);
+}
+
+/* loader: chalk dust drifts on the plate from the very first paint (CSS only, lesson 11) */
+.loader-dust {
+  background-image:
+    radial-gradient(60% 40% at 30% 30%, rgba(255, 255, 255, 0.55), transparent 70%),
+    radial-gradient(40% 50% at 75% 65%, rgba(160, 155, 145, 0.35), transparent 70%);
+  animation: loader-dust 3.2s linear infinite alternate;
+}
+@keyframes loader-dust {
+  from { transform: translate3d(-3%, 2%, 0) scale(1.05); }
+  to { transform: translate3d(3%, -2%, 0) scale(1.12); }
+}
+
+/* join band: words extruded into a solid block by hard stacked shadows (M289); --ex 0 → 1 */
+.extrude {
+  --ex: 1;
+  --exc: #1c3393;
+  text-shadow:
+    calc(2px * var(--ex)) calc(2px * var(--ex)) 0 var(--exc),
+    calc(4px * var(--ex)) calc(4px * var(--ex)) 0 var(--exc),
+    calc(6px * var(--ex)) calc(6px * var(--ex)) 0 var(--exc),
+    calc(8px * var(--ex)) calc(8px * var(--ex)) 0 var(--exc),
+    calc(10px * var(--ex)) calc(10px * var(--ex)) 0 var(--exc),
+    calc(12px * var(--ex)) calc(12px * var(--ex)) 0 var(--exc),
+    calc(14px * var(--ex)) calc(14px * var(--ex)) 0 #14246b;
+}
+
+/* coach rows: the active row inverts to chalk */
+.coach-row.is-active {
+  background: var(--chalk);
+  color: var(--chalk-ink);
+}
+.coach-row.is-active .text-muted {
+  color: #5b5850;
+}
+
+/* plan rows: the selected one is filled */
+.plan-row.is-on {
+  background: rgba(21, 20, 19, 0.06);
+}
+
+/* timetable: the picked cell */
+.flap.is-pick {
+  background: var(--plate-blue);
+  box-shadow: inset 0 0 0 2px #ecE9e2;
+}
+.flap.is-pick .text-muted {
+  color: rgba(236, 233, 226, 0.8);
+}
+
+/* page-wide chalk air: two coarse haze fields, drifting + an irregular linear flicker (lesson 71) */
+.chalk-air {
+  mix-blend-mode: screen;
+}
+.chalk-air-a {
+  background:
+    radial-gradient(28% 22% at 30% 20%, rgba(236, 233, 226, 0.07), transparent 70%),
+    radial-gradient(22% 30% at 72% 70%, rgba(236, 233, 226, 0.055), transparent 70%);
+  animation:
+    chalk-drift-a 11s linear infinite alternate,
+    chalk-flicker 2.3s linear infinite;
+}
+.chalk-air-b {
+  background:
+    radial-gradient(26% 26% at 60% 30%, rgba(236, 233, 226, 0.05), transparent 70%),
+    radial-gradient(30% 20% at 18% 78%, rgba(236, 233, 226, 0.05), transparent 70%);
+  animation:
+    chalk-drift-b 13s linear infinite alternate,
+    chalk-flicker 3.1s linear infinite reverse;
+}
+@keyframes chalk-drift-a {
+  from { transform: translate3d(-4%, 3%, 0); }
+  to { transform: translate3d(5%, -4%, 0); }
+}
+@keyframes chalk-drift-b {
+  from { transform: translate3d(4%, -2%, 0); }
+  to { transform: translate3d(-5%, 4%, 0); }
+}
+@keyframes chalk-flicker {
+  0% { opacity: 0.7; }
+  17% { opacity: 1; }
+  31% { opacity: 0.55; }
+  52% { opacity: 0.95; }
+  68% { opacity: 0.6; }
+  84% { opacity: 1; }
+  100% { opacity: 0.7; }
+}
+html.is-static .chalk-air-a,
+html.is-static .chalk-air-b {
+  animation: none;
+}
+
+/* C12 bezel glint: a slow pass on a loop (time-based life on pinned cards, lesson 9) */
+.glint {
+  animation: glint-pass 3.4s linear infinite;
+}
+@keyframes glint-pass {
+  from { transform: translateX(-70%); }
+  to { transform: translateX(70%); }
+}
+html.is-static .glint {
+  animation: none;
+  opacity: 0;
+}
+
+/* X14: chalk haze bleeding off the hero floor (light only) */
+.bleed-haze {
+  background:
+    radial-gradient(34% 26% at 22% 72%, rgba(236, 233, 226, 0.6), transparent 70%),
+    radial-gradient(28% 30% at 58% 60%, rgba(236, 233, 226, 0.45), transparent 70%),
+    radial-gradient(30% 22% at 84% 80%, rgba(236, 233, 226, 0.5), transparent 70%),
+    radial-gradient(22% 18% at 40% 38%, rgba(236, 233, 226, 0.3), transparent 70%),
+    radial-gradient(90% 40% at 50% 104%, rgba(236, 233, 226, 0.55), transparent 75%);
+  mix-blend-mode: screen;
+  animation: chalk-drift-a 6s linear infinite alternate;
+}
+
+/* X28: rack uprights (iron, hole column, knurled foot) */
+.upright {
+  background:
+    radial-gradient(circle at 50% 50%, #050505 0 4px, transparent 4.5px) 50% 0 / 100% 46px repeat-y,
+    linear-gradient(90deg, #1a1918, #2c2b28 45%, #1d1c1a);
+  box-shadow: inset -2px 0 0 #0a0a09, inset 2px 0 0 #3a3835;
+}
+.upright::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 14px;
+  background-image:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.16) 0 1px, transparent 1px 6px),
+    repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.55) 0 1px, transparent 1px 6px);
+  background-color: #3a3835;
+}
+
+/* record-mode fake hover mirrors the real :hover (site/lib/fakePointer.ts) */
+.ibtn-blue.is-hover {
+  color: var(--chalk-ink);
+}
+.ibtn-blue.is-hover::before,
+.ibtn-chalk.is-hover::before {
+  transform: scaleX(1);
+}
+.ibtn-chalk.is-hover {
+  color: var(--chalk);
+}
+
+/* U120 3D press on the nav "Book a trial" cell: the face sinks into its thick edge and comes straight back */
+.press3d {
+  box-shadow: inset 0 -6px 0 #1c3393;
+  transition:
+    transform 0.12s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.12s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.press3d:active,
+.press3d.is-press {
+  transform: translateY(4px);
+  box-shadow: inset 0 -2px 0 #1c3393;
+}
+
+/* footer links: underline draws left → right */
+.fl-link {
+  background: linear-gradient(currentColor, currentColor) left 100% / 0% 2px no-repeat;
+  padding-bottom: 3px;
+  transition: background-size 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.fl-link:hover,
+.fl-link.is-hover {
+  background-size: 100% 2px;
+}
+.press3d-chalk {
+  box-shadow: inset 0 -6px 0 #b9b5ad;
+  transition: transform 0.12s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.12s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.press3d-chalk:active,
+.press3d-chalk.is-press {
+  transform: translateY(4px);
+  box-shadow: inset 0 -2px 0 #b9b5ad;
+}
+.flap.is-press {
+  transform: scale(0.96);
+}
+.flap {
+  transition: transform 0.12s ease-out;
+}
+.plan-row.is-press {
+  background: rgba(21, 20, 19, 0.12);
+}
